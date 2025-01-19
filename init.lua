@@ -247,6 +247,13 @@ require('lazy').setup({
       require('nvim-tree').setup {}
     end,
   },
+  {
+    'lervag/vimtex',
+    lazy = false,
+    init = function()
+      vim.g.vimtex_view_method = 'zathura'
+    end,
+  },
   -- Here is a more advanced example where we pass configuration
   -- options to `gitsigns.nvim`. This is equivalent to the following Lua:
   --    require('gitsigns').setup({ ... })
@@ -980,6 +987,8 @@ require('lazy').setup({
     },
   },
 })
+
+vim.cmd 'colorscheme sonokai'
 
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
