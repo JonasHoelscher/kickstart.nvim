@@ -76,7 +76,7 @@ Kickstart Guide:
     Feel free to delete them once you know what you're doing, but they should serve as a guide
     for when you are first encountering a few different constructs in your Neovim config.
 
-If you experience any errors while trying to install kickstart, run `:checkhealth` for more info.
+If you experience any errors while tryingto install kickstart, run `:checkhealth` for more info.
 
 I hope you enjoy your Neovim journey,
 - TJ
@@ -102,7 +102,7 @@ vim.g.have_nerd_font = false
 vim.opt.number = true
 -- You can also add relative line numbers, to help with jumping.
 --  Experiment for yourself to see if you like it!
--- vim.opt.relativenumber = true
+vim.opt.relativenumber = true
 
 -- Enable mouse mode, can be useful for resizing splits for example!
 vim.opt.mouse = 'a'
@@ -251,7 +251,7 @@ require('lazy').setup({
     'lervag/vimtex',
     lazy = false,
     init = function()
-      vim.g.vimtex_view_method = 'zathura'
+      vim.g.vimtex_view_general_viewer = 'okular'
     end,
   },
   -- Here is a more advanced example where we pass configuration
@@ -874,6 +874,10 @@ require('lazy').setup({
     end,
   },
 
+  {
+    'vimjas/vim-python-pep8-indent',
+    ft = 'python',
+  },
   -- Highlight todo, notes, etc in comments
   { 'folke/todo-comments.nvim', event = 'VimEnter', dependencies = { 'nvim-lua/plenary.nvim' }, opts = { signs = false } },
 
@@ -989,6 +993,19 @@ require('lazy').setup({
 })
 
 vim.cmd 'colorscheme sonokai'
+vim.o.textwidth = 79
+vim.o.colorcolumn = '79'
+vim.g.vimtex_compiler_latexmk = {
+  executable = 'latexmk',
+  options = { '-pdf', '-shell-escape', '-synctex=1', '-interaction=nonstopmode' },
+}
+vim.g.vimtex_spelllang = 'en,de'
+-- Highlight für unnötige Leerzeichen am Ende der Zeilen
+vim.cmd [[highlight ExtraWhitespace ctermbg=red guibg=red]]
+vim.cmd [[match ExtraWhitespace /\s\+$/]]
+
+-- Highlight für Leerzeichen am Ende der Zeile in bestimmten Dateitypen
+vim.cmd [[highlight BadWhitespace ctermbg=red guibg=red]]
 
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
