@@ -251,7 +251,8 @@ require('lazy').setup({
     'lervag/vimtex',
     lazy = false,
     init = function()
-      vim.g.vimtex_view_general_viewer = 'okular'
+      vim.g.vimtex_view_method = 'zathura'
+      vim.g.vimtex_view_general_options = '--unique file:@pdf\\#src:@line@tex'
     end,
   },
   -- Here is a more advanced example where we pass configuration
@@ -956,6 +957,17 @@ require('lazy').setup({
     --    - Incremental selection: Included, see `:help nvim-treesitter-incremental-selection-mod`
     --    - Show your current context: https://github.com/nvim-treesitter/nvim-treesitter-context
     --    - Treesitter + textobjects: https://github.com/nvim-treesitter/nvim-treesitter-textobjects
+  },
+  {
+    'dense-analysis/ale',
+    config = function()
+      -- Configuration goes here.
+      local g = vim.g
+
+      g.ale_linters = {
+        python = { 'flake8', 'ruff' },
+      }
+    end,
   },
 
   -- The following comments only work if you have downloaded the kickstart repo, not just copy pasted the
