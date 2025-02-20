@@ -91,7 +91,7 @@ vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
 
 -- Set to true if you have a Nerd Font installed and selected in the terminal
-vim.g.have_nerd_font = false
+vim.g.have_nerd_font = true
 
 -- [[ Setting options ]]
 -- See `:help vim.opt`
@@ -102,7 +102,7 @@ vim.g.have_nerd_font = false
 vim.opt.number = true
 -- You can also add relative line numbers, to help with jumping.
 --  Experiment for yourself to see if you like it!
-vim.opt.relativenumber = true
+-- vim.opt.relativenumber = true
 
 -- Enable mouse mode, can be useful for resizing splits for example!
 vim.opt.mouse = 'a'
@@ -637,6 +637,13 @@ require('lazy').setup({
         clangd = {},
         -- gopls = {},
         pyright = {},
+        ltex = {
+          settings = {
+            ltex = {
+              language = 'de',
+            },
+          },
+        },
         -- rust_analyzer = {},
         -- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
         --
@@ -888,7 +895,7 @@ require('lazy').setup({
     config = function()
       require('toggleterm').setup {
         size = 20,
-        open_mapping = [[<c-\>]],
+        open_mapping = [[<c-]>]],
         direction = 'float',
       }
     end,
@@ -964,10 +971,29 @@ require('lazy').setup({
       -- Configuration goes here.
       local g = vim.g
 
+      g.ale_echo_msg_format = '[%linter%] %s'
       g.ale_linters = {
         python = { 'flake8', 'ruff' },
       }
     end,
+  },
+  {
+    'christoomey/vim-tmux-navigator',
+    cmd = {
+      'TmuxNavigateLeft',
+      'TmuxNavigateDown',
+      'TmuxNavigateUp',
+      'TmuxNavigateRight',
+      'TmuxNavigatePrevious',
+      'TmuxNavigatorProcessList',
+    },
+    keys = {
+      { '<c-h>', '<cmd><C-U>TmuxNavigateLeft<cr>' },
+      { '<c-j>', '<cmd><C-U>TmuxNavigateDown<cr>' },
+      { '<c-k>', '<cmd><C-U>TmuxNavigateUp<cr>' },
+      { '<c-l>', '<cmd><C-U>TmuxNavigateRight<cr>' },
+      { '<c-/>', '<cmd><C-U>TmuxNavigatePrevious<cr>' },
+    },
   },
 
   -- The following comments only work if you have downloaded the kickstart repo, not just copy pasted the
@@ -1011,7 +1037,7 @@ vim.g.vimtex_compiler_latexmk = {
   executable = 'latexmk',
   options = { '-pdf', '-shell-escape', '-synctex=1', '-interaction=nonstopmode' },
 }
-vim.g.vimtex_spelllang = 'en,de'
+
 -- Highlight für unnötige Leerzeichen am Ende der Zeilen
 vim.cmd [[highlight ExtraWhitespace ctermbg=red guibg=red]]
 vim.cmd [[match ExtraWhitespace /\s\+$/]]
@@ -1023,3 +1049,25 @@ vim.api.nvim_set_keymap('n', '<F9>', ':w<CR>:!python %<CR>', { noremap = true })
 
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
+
+-- Set spell in latex files
+vim.api.nvim_create_autocmd('FileType', {
+  pattern = 'tex',
+  command = 'setlocal spell spelllang=de',
+})
+
+-- Toggle autocompletion window
+local cmp = require 'cmp'
+
+vim.g.cmp_enabled = true
+
+vim.keymap.set('n', '<F3>', function()
+  vim.g.cmp_enabled = not vim.g.cmp_enabled
+  if vim.g.cmp_enabled then
+    cmp.setup { completion = { autocomplete = { 'TextChanged', 'InsertEnter' } } }
+    require 'notify' 'Completion aktiviert'
+  else
+    cmp.setup { completion = { autocomplete = {} } }
+    require 'notify' 'Completion deaktiviert'
+  end
+end, { noremap = true, silent = true })
