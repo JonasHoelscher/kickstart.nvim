@@ -93,6 +93,9 @@ vim.g.maplocalleader = ' '
 -- Set to true if you have a Nerd Font installed and selected in the terminal
 vim.g.have_nerd_font = true
 
+-- Set fileformat to unix
+vim.opt.fileformat = 'unix'
+
 -- [[ Setting options ]]
 -- See `:help vim.opt`
 -- NOTE: You can change these options as you wish!
@@ -897,6 +900,7 @@ require('lazy').setup({
         size = 20,
         open_mapping = [[<c-]>]],
         direction = 'float',
+        shell = '/bin/zsh',
       }
     end,
   },
@@ -995,6 +999,9 @@ require('lazy').setup({
       { '<c-/>', '<cmd><C-U>TmuxNavigatePrevious<cr>' },
     },
   },
+  {
+    'rcarriga/nvim-notify',
+  },
 
   -- The following comments only work if you have downloaded the kickstart repo, not just copy pasted the
   -- init.lua. If you want these files, they are in the repository, so you can just download them and
@@ -1071,3 +1078,4 @@ vim.keymap.set('n', '<F3>', function()
     require 'notify' 'Completion deaktiviert'
   end
 end, { noremap = true, silent = true })
+
