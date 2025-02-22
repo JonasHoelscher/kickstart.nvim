@@ -105,7 +105,7 @@ vim.opt.fileformat = 'unix'
 vim.opt.number = true
 -- You can also add relative line numbers, to help with jumping.
 --  Experiment for yourself to see if you like it!
-vim.opt.relativenumber = true
+-- vim.opt.relativenumber = true
 
 -- Enable mouse mode, can be useful for resizing splits for example!
 vim.opt.mouse = 'a'
@@ -898,7 +898,7 @@ require('lazy').setup({
     config = function()
       require('toggleterm').setup {
         size = 20,
-        open_mapping = [[<c-\>]],
+        open_mapping = [[<c-]>]],
         direction = 'float',
         shell = '/bin/zsh',
       }
@@ -980,6 +980,24 @@ require('lazy').setup({
         python = { 'flake8', 'ruff' },
       }
     end,
+  },
+  {
+    'christoomey/vim-tmux-navigator',
+    cmd = {
+      'TmuxNavigateLeft',
+      'TmuxNavigateDown',
+      'TmuxNavigateUp',
+      'TmuxNavigateRight',
+      'TmuxNavigatePrevious',
+      'TmuxNavigatorProcessList',
+    },
+    keys = {
+      { '<c-h>', '<cmd><C-U>TmuxNavigateLeft<cr>' },
+      { '<c-j>', '<cmd><C-U>TmuxNavigateDown<cr>' },
+      { '<c-k>', '<cmd><C-U>TmuxNavigateUp<cr>' },
+      { '<c-l>', '<cmd><C-U>TmuxNavigateRight<cr>' },
+      { '<c-/>', '<cmd><C-U>TmuxNavigatePrevious<cr>' },
+    },
   },
   {
     'rcarriga/nvim-notify',
@@ -1100,3 +1118,4 @@ vim.api.nvim_create_autocmd({ 'BufRead', 'BufNewFile' }, {
     vim.bo.filetype = 'c' -- Erzwinge C für .h-Dateien
   end,
 })
+
