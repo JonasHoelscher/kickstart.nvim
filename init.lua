@@ -984,6 +984,38 @@ require('lazy').setup({
   {
     'rcarriga/nvim-notify',
   },
+  {
+    'mikavilpas/yazi.nvim',
+    event = 'VeryLazy',
+    keys = {
+      -- 👇 in this section, choose your own keymappings!
+      {
+        '<leader>wc',
+        mode = { 'n', 'v' },
+        '<cmd>Yazi<cr>',
+        desc = 'Open yazi at the current file',
+      },
+      {
+        -- Open in the current working directory
+        '<leader>wo',
+        '<cmd>Yazi cwd<cr>',
+        desc = "Open the file manager in nvim's working directory",
+      },
+      {
+        '<c-up>',
+        '<cmd>Yazi toggle<cr>',
+        desc = 'Resume the last yazi session',
+      },
+    },
+    ---@type YaziConfig
+    opts = {
+      -- if you want to open yazi instead of netrw, see below for more info
+      open_for_directories = false,
+      keymaps = {
+        show_help = '<f1>',
+      },
+    },
+  },
 
   -- The following comments only work if you have downloaded the kickstart repo, not just copy pasted the
   -- init.lua. If you want these files, they are in the repository, so you can just download them and
@@ -1060,3 +1092,11 @@ vim.keymap.set('n', '<F3>', function()
     require 'notify' 'Completion deaktiviert'
   end
 end, { noremap = true, silent = true })
+
+-- Check .h files as c files not cpp
+vim.api.nvim_create_autocmd({ 'BufRead', 'BufNewFile' }, {
+  pattern = '*.h',
+  callback = function()
+    vim.bo.filetype = 'c' -- Erzwinge C für .h-Dateien
+  end,
+})
