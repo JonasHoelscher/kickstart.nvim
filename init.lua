@@ -1119,3 +1119,14 @@ vim.api.nvim_create_autocmd({ 'BufRead', 'BufNewFile' }, {
   end,
 })
 
+-- Settings for c and h files
+vim.api.nvim_create_autocmd('FileType', {
+  pattern = { 'c', 'cpp', 'h' },
+  callback = function()
+    vim.bo.tabstop = 4
+    vim.bo.shiftwidth = 4
+    vim.bo.expandtab = true
+    vim.bo.textwidth = 80 -- Maximale Zeilenlänge auf 80 setzen
+    vim.wo.colorcolumn = '80' -- Visuelle Markierung bei 80 Zeichen
+  end,
+})
