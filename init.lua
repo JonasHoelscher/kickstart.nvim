@@ -231,7 +231,7 @@ vim.opt.rtp:prepend(lazypath)
 -- NOTE: Here is where you install your plugins.
 require('lazy').setup({
   -- NOTE: Plugins can be added with a link (or for a github repo: 'owner/repo' link).
-  'tpope/vim-sleuth', -- Detect tabstop and shiftwidth automatically
+  -- 'tpope/vim-sleuth', -- Detect tabstop and shiftwidth automatically
 
   -- NOTE: Plugins can also be added by using a table,
   -- with the first argument being the link and the following
@@ -1070,8 +1070,6 @@ require('lazy').setup({
 })
 
 vim.cmd 'colorscheme gruvbox'
-vim.o.textwidth = 79
-vim.o.colorcolumn = '79'
 vim.g.vimtex_compiler_latexmk = {
   executable = 'latexmk',
   options = { '-pdf', '-shell-escape', '-synctex=1', '-interaction=nonstopmode' },
@@ -1119,14 +1117,41 @@ vim.api.nvim_create_autocmd({ 'BufRead', 'BufNewFile' }, {
   end,
 })
 
+-- Indentation settings
 -- Settings for c and h files
 vim.api.nvim_create_autocmd('FileType', {
   pattern = { 'c', 'cpp', 'h' },
   callback = function()
     vim.bo.tabstop = 4
     vim.bo.shiftwidth = 4
-    vim.bo.expandtab = true
     vim.bo.textwidth = 80 -- Maximale Zeilenlänge auf 80 setzen
     vim.wo.colorcolumn = '80' -- Visuelle Markierung bei 80 Zeichen
+    vim.bo.softtabstop = 4
   end,
 })
+
+-- Settings for python files
+vim.api.nvim_create_autocmd('FileType', {
+  pattern = { 'py' },
+  callback = function()
+    vim.bo.tabstop = 4
+    vim.bo.shiftwidth = 4
+    vim.bo.textwidth = 79 -- Maximale Zeilenlänge auf 80 setzen
+    vim.wo.colorcolumn = '79' -- Visuelle Markierung bei 80 Zeichen
+    vim.bo.softtabstop = 4
+  end,
+})
+
+-- Settings for lua files
+vim.api.nvim_create_autocmd('FileType', {
+  pattern = { 'lua' },
+  callback = function()
+    vim.bo.tabstop = 2
+    vim.bo.shiftwidth = 2
+    vim.bo.softtabstop = 2
+  end,
+})
+-- General indent setttings
+vim.opt.autoindent = true
+vim.opt.smartindent = true
+vim.opt.expandtab = true
