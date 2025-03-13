@@ -231,7 +231,7 @@ vim.opt.rtp:prepend(lazypath)
 -- NOTE: Here is where you install your plugins.
 require('lazy').setup({
   -- NOTE: Plugins can be added with a link (or for a github repo: 'owner/repo' link).
-  -- 'tpope/vim-sleuth', -- Detect tabstop and shiftwidth automatically
+  'tpope/vim-sleuth', -- Detect tabstop and shiftwidth automatically
 
   -- NOTE: Plugins can also be added by using a table,
   -- with the first argument being the link and the following
@@ -1003,36 +1003,7 @@ require('lazy').setup({
     'rcarriga/nvim-notify',
   },
   {
-    'mikavilpas/yazi.nvim',
-    event = 'VeryLazy',
-    keys = {
-      -- 👇 in this section, choose your own keymappings!
-      {
-        '<leader>wc',
-        mode = { 'n', 'v' },
-        '<cmd>Yazi<cr>',
-        desc = 'Open yazi at the current file',
-      },
-      {
-        -- Open in the current working directory
-        '<leader>wo',
-        '<cmd>Yazi cwd<cr>',
-        desc = "Open the file manager in nvim's working directory",
-      },
-      {
-        '<c-up>',
-        '<cmd>Yazi toggle<cr>',
-        desc = 'Resume the last yazi session',
-      },
-    },
-    ---@type YaziConfig
-    opts = {
-      -- if you want to open yazi instead of netrw, see below for more info
-      open_for_directories = false,
-      keymaps = {
-        show_help = '<f1>',
-      },
-    },
+    'mbbill/undotree',
   },
 
   -- The following comments only work if you have downloaded the kickstart repo, not just copy pasted the
@@ -1092,6 +1063,9 @@ vim.api.nvim_create_autocmd('FileType', {
   pattern = 'tex',
   command = 'setlocal spell spelllang=de',
 })
+
+-- Set undotree
+vim.keymap.set('n', '<leader><F5>', vim.cmd.UndotreeToggle, { desc = 'Toggle Undotree' })
 
 -- Toggle autocompletion window
 local cmp = require 'cmp'
