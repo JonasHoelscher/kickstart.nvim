@@ -231,7 +231,7 @@ vim.opt.rtp:prepend(lazypath)
 -- NOTE: Here is where you install your plugins.
 require('lazy').setup({
   -- NOTE: Plugins can be added with a link (or for a github repo: 'owner/repo' link).
-  -- 'tpope/vim-sleuth', -- Detect tabstop and shiftwidth automatically
+  'tpope/vim-sleuth', -- Detect tabstop and shiftwidth automatically
 
   -- NOTE: Plugins can also be added by using a table,
   -- with the first argument being the link and the following
@@ -1002,6 +1002,9 @@ require('lazy').setup({
   {
     'rcarriga/nvim-notify',
   },
+  {
+    'mbbill/undotree',
+  },
 
   -- The following comments only work if you have downloaded the kickstart repo, not just copy pasted the
   -- init.lua. If you want these files, they are in the repository, so you can just download them and
@@ -1060,6 +1063,9 @@ vim.api.nvim_create_autocmd('FileType', {
   pattern = 'tex',
   command = 'setlocal spell spelllang=de',
 })
+
+-- Set undotree
+vim.keymap.set('n', '<leader><F5>', vim.cmd.UndotreeToggle, { desc = 'Toggle Undotree' })
 
 -- Toggle autocompletion window
 local cmp = require 'cmp'
