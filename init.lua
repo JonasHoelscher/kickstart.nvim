@@ -887,6 +887,14 @@ require('lazy').setup({
     priority = 1000,
     config = true,
   },
+  {
+    'iamcco/markdown-preview.nvim',
+    cmd = { 'MarkdownPreviewToggle', 'MarkdownPreview', 'MarkdownPreviewStop' },
+    ft = { 'markdown' },
+    build = function()
+      vim.fn['mkdp#util#install']()
+    end,
+  },
 
   {
     'vimjas/vim-python-pep8-indent',
