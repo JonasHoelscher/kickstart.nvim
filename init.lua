@@ -84,6 +84,10 @@ I hope you enjoy your Neovim journey,
 P.S. You can delete this when you're done too. It's your config now! :)
 --]]
 
+-- Suppress deprecated warnings
+-- TODO Remove after update?
+vim.deprecate = function() end
+
 -- Set <space> as the leader key
 -- See `:help mapleader`
 --  NOTE: Must happen before plugins are loaded (otherwise wrong leader will be used)
@@ -247,7 +251,20 @@ require('lazy').setup({
       'nvim-tree/nvim-web-devicons',
     },
     config = function()
-      require('nvim-tree').setup {}
+      require('nvim-tree').setup {
+        view = {
+          adaptive_size = true,
+          side = 'left',
+          width = 30,
+        },
+        renderer = {
+          group_empty = true,
+        },
+        update_focused_file = {
+          enable = true,
+          update_root = true,
+        },
+      }
     end,
   },
   {
@@ -643,7 +660,8 @@ require('lazy').setup({
         ltex = {
           settings = {
             ltex = {
-              language = 'de',
+              language = 'de-DE',
+              additionalLanguages = { 'de-DE', 'en-US' },
             },
           },
         },
@@ -1005,6 +1023,15 @@ require('lazy').setup({
   {
     'mbbill/undotree',
   },
+  -- {
+  --   'iamcco/markdown-preview.nvim',
+  --   cmd = { 'MarkdownPreviewToggle', 'MarkdownPreview', 'MarkdownPreviewStop' },
+  --   build = 'cd app && npm install',
+  --   init = function()
+  --     vim.g.mkdp_filetypes = { 'markdown' }
+  --   end,
+  --   ft = { 'markdown' },
+  -- },
 
   -- The following comments only work if you have downloaded the kickstart repo, not just copy pasted the
   -- init.lua. If you want these files, they are in the repository, so you can just download them and
@@ -1040,10 +1067,11 @@ require('lazy').setup({
   },
 })
 
+-- Set colorscheme
 vim.cmd 'colorscheme gruvbox'
 vim.g.vimtex_compiler_latexmk = {
   executable = 'latexmk',
-  options = { '-pdf', '-shell-escape', '-synctex=1', '-interaction=nonstopmode' },
+  options = { '-pdflatex=lualatex', '-pdf', '-shell-escape', '-synctex=1', '-interaction=nonstopmode' },
 }
 
 -- Highlight für unnötige Leerzeichen am Ende der Zeilen
@@ -1067,12 +1095,16 @@ vim.api.nvim_create_autocmd('FileType', {
 -- Set undotree
 vim.keymap.set('n', '<leader><F5>', vim.cmd.UndotreeToggle, { desc = 'Toggle Undotree' })
 
+-- Toggle nvimtree
+vim.keymap.set('n', '<leader>e', ':NvimTreeToggle<CR>', { noremap = true, silent = true, desc = 'Toggle NvimTree' })
+
 -- Toggle autocompletion window
 local cmp = require 'cmp'
 
 vim.g.cmp_enabled = true
 
-vim.keymap.set('n', '<F3>', function()
+-- Keymap toggle autocompletion
+function ToggleAutocomplete()
   vim.g.cmp_enabled = not vim.g.cmp_enabled
   if vim.g.cmp_enabled then
     cmp.setup { completion = { autocomplete = { 'TextChanged', 'InsertEnter' } } }
@@ -1081,7 +1113,9 @@ vim.keymap.set('n', '<F3>', function()
     cmp.setup { completion = { autocomplete = {} } }
     require 'notify' 'Completion deaktiviert'
   end
-end, { noremap = true, silent = true })
+end
+
+vim.keymap.set('n', '<F3>', ToggleAutocomplete, { noremap = true, silent = true, desc = 'Toggle Autocompletion' })
 
 -- Check .h files as c files not cpp
 vim.api.nvim_create_autocmd({ 'BufRead', 'BufNewFile' }, {
@@ -1125,9 +1159,25 @@ vim.api.nvim_create_autocmd('FileType', {
     vim.bo.softtabstop = 2
   end,
 })
+
 -- General indent setttings
 vim.opt.autoindent = true
 vim.opt.smartindent = true
 vim.opt.expandtab = true
 vim.opt.tabstop = 4
 vim.opt.shiftwidth = 4
+
+-- Add switch for spell check
+vim.opt.spelllang = { 'en' }
+function ToggleSpellLang()
+  local current = vim.opt.spelllang:get()[1]
+  if current == 'en' then
+    vim.opt.spelllang = { 'de' }
+    require 'notify' 'Spellcheck set to German'
+  else
+    vim.opt.spelllang = { 'en' }
+    require 'notify' 'Spellcheck set to English'
+  end
+end
+
+vim.keymap.set('n', '<leader>dt', ToggleSpellLang, { desc = 'Toggle spelllang (en/de)' })
