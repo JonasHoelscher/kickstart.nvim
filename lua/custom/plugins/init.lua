@@ -4,6 +4,30 @@
 -- See the kickstart.nvim README for more information
 return {
   {
+    'lervag/vimtex',
+    lazy = false,
+    init = function()
+      vim.g.vimtex_view_method = 'zathura'
+      vim.g.vimtex_view_general_options = '--unique file:@pdf\\#src:@line@tex'
+    end,
+  },
+  {
+    'vimjas/vim-python-pep8-indent',
+    ft = 'python',
+  },
+  {
+    'akinsho/toggleterm.nvim',
+    version = '',
+    config = function()
+      require('toggleterm').setup {
+        size = 20,
+        open_mapping = [[<c-]>]],
+        direction = 'float',
+        shell = '/bin/zsh',
+      }
+    end,
+  },
+  {
     'christoomey/vim-tmux-navigator',
     cmd = {
       'TmuxNavigateLeft',

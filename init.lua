@@ -267,14 +267,6 @@ require('lazy').setup({
       }
     end,
   },
-  {
-    'lervag/vimtex',
-    lazy = false,
-    init = function()
-      vim.g.vimtex_view_method = 'zathura'
-      vim.g.vimtex_view_general_options = '--unique file:@pdf\\#src:@line@tex'
-    end,
-  },
   -- Here is a more advanced example where we pass configuration
   -- options to `gitsigns.nvim`. This is equivalent to the following Lua:
   --    require('gitsigns').setup({ ... })
@@ -656,14 +648,12 @@ require('lazy').setup({
       local servers = {
         clangd = {},
         -- gopls = {},
-        -- pyright = {},
-        ruff = {
-          settings = {},
-        },
+        pyright = {},
+        -- ruff = {},
         ltex = {
           settings = {
             ltex = {
-              enabled = { 'latex', 'markdown', 'restructuredtext' },
+              -- enabled = { 'tex', 'latex', 'markdown', 'restructuredtext' },
               language = 'de-DE',
               additionalLanguages = { 'de-DE', 'en-US' },
             },
@@ -908,31 +898,6 @@ require('lazy').setup({
     'ellisonleao/gruvbox.nvim',
     priority = 1000,
     config = true,
-  },
-  --  {
-  --    'iamcco/markdown-preview.nvim',
-  --    cmd = { 'MarkdownPreviewToggle', 'MarkdownPreview', 'MarkdownPreviewStop' },
-  --    ft = { 'markdown' },
-  --    build = function()
-  --      vim.fn['mkdp#util#install']()
-  --    end,
-  --  },
-
-  {
-    'vimjas/vim-python-pep8-indent',
-    ft = 'python',
-  },
-  {
-    'akinsho/toggleterm.nvim',
-    version = '',
-    config = function()
-      require('toggleterm').setup {
-        size = 20,
-        open_mapping = [[<c-]>]],
-        direction = 'float',
-        shell = '/bin/zsh',
-      }
-    end,
   },
   -- Highlight todo, notes, etc in comments
   { 'folke/todo-comments.nvim', event = 'VimEnter', dependencies = { 'nvim-lua/plenary.nvim' }, opts = { signs = false } },
