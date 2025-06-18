@@ -656,10 +656,14 @@ require('lazy').setup({
       local servers = {
         clangd = {},
         -- gopls = {},
-        pyright = {},
+        -- pyright = {},
+        ruff = {
+          settings = {},
+        },
         ltex = {
           settings = {
             ltex = {
+              enabled = { 'latex', 'markdown', 'restructuredtext' },
               language = 'de-DE',
               additionalLanguages = { 'de-DE', 'en-US' },
             },
@@ -995,51 +999,6 @@ require('lazy').setup({
     --    - Show your current context: https://github.com/nvim-treesitter/nvim-treesitter-context
     --    - Treesitter + textobjects: https://github.com/nvim-treesitter/nvim-treesitter-textobjects
   },
-  {
-    'dense-analysis/ale',
-    config = function()
-      -- Configuration goes here.
-      local g = vim.g
-
-      g.ale_echo_msg_format = '[%linter%] %s'
-      g.ale_linters = {
-        python = { 'flake8', 'ruff' },
-      }
-    end,
-  },
-  {
-    'christoomey/vim-tmux-navigator',
-    cmd = {
-      'TmuxNavigateLeft',
-      'TmuxNavigateDown',
-      'TmuxNavigateUp',
-      'TmuxNavigateRight',
-      'TmuxNavigatePrevious',
-      'TmuxNavigatorProcessList',
-    },
-    keys = {
-      { '<c-h>', '<cmd><C-U>TmuxNavigateLeft<cr>' },
-      { '<c-j>', '<cmd><C-U>TmuxNavigateDown<cr>' },
-      { '<c-k>', '<cmd><C-U>TmuxNavigateUp<cr>' },
-      { '<c-l>', '<cmd><C-U>TmuxNavigateRight<cr>' },
-      { '<c-/>', '<cmd><C-U>TmuxNavigatePrevious<cr>' },
-    },
-  },
-  {
-    'rcarriga/nvim-notify',
-  },
-  {
-    'mbbill/undotree',
-  },
-  -- {
-  --   'iamcco/markdown-preview.nvim',
-  --   cmd = { 'MarkdownPreviewToggle', 'MarkdownPreview', 'MarkdownPreviewStop' },
-  --   build = 'cd app && npm install',
-  --   init = function()
-  --     vim.g.mkdp_filetypes = { 'markdown' }
-  --   end,
-  --   ft = { 'markdown' },
-  -- },
 
   -- The following comments only work if you have downloaded the kickstart repo, not just copy pasted the
   -- init.lua. If you want these files, they are in the repository, so you can just download them and
@@ -1051,17 +1010,17 @@ require('lazy').setup({
   --  Uncomment any of the lines below to enable them (you will need to restart nvim).
   --
   -- require 'kickstart.plugins.debug',
-  -- require 'kickstart.plugins.indent_line',
-  -- require 'kickstart.plugins.lint',
+  require 'kickstart.plugins.indent_line',
+  require 'kickstart.plugins.lint',
   -- require 'kickstart.plugins.autopairs',
   -- require 'kickstart.plugins.neo-tree',
-  -- require 'kickstart.plugins.gitsigns', -- adds gitsigns recommend keymaps
+  require 'kickstart.plugins.gitsigns', -- adds gitsigns recommend keymaps
 
   -- NOTE: The import below can automatically add your own plugins, configuration, etc from `lua/custom/plugins/*.lua`
   --    This is the easiest way to modularize your config.
   --
   --  Uncomment the following line and add your plugins to `lua/custom/plugins/*.lua` to get going.
-  -- { import = 'custom.plugins' },
+  { import = 'custom.plugins' },
   --
   -- For additional information with loading, sourcing and examples see `:help lazy.nvim-🔌-plugin-spec`
   -- Or use telescope!
@@ -1082,14 +1041,13 @@ vim.g.vimtex_compiler_latexmk = {
   options = { '-pdflatex=lualatex', '-pdf', '-shell-escape', '-synctex=1', '-interaction=nonstopmode' },
 }
 
--- Highlight für unnötige Leerzeichen am Ende der Zeilen
+-- Highlight spaces at end of line
 vim.cmd [[highlight ExtraWhitespace ctermbg=red guibg=red]]
 vim.cmd [[match ExtraWhitespace /\s\+$/]]
-
--- Highlight für Leerzeichen am Ende der Zeile in bestimmten Dateitypen
 vim.cmd [[highlight BadWhitespace ctermbg=red guibg=red]]
 
-vim.api.nvim_set_keymap('n', '<F9>', ':w<CR>:!python %<CR>', { noremap = true })
+-- Set keymap to execute current python file
+-- vim.api.nvim_set_keymap('n', '<F9>', ':w<CR>:!python %<CR>', { noremap = true })
 
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
@@ -1108,7 +1066,6 @@ vim.keymap.set('n', '<leader>e', ':NvimTreeToggle<CR>', { noremap = true, silent
 
 -- Toggle autocompletion window
 local cmp = require 'cmp'
-
 vim.g.cmp_enabled = true
 
 -- Keymap toggle autocompletion
@@ -1125,6 +1082,21 @@ end
 
 vim.keymap.set('n', '<F3>', ToggleAutocomplete, { noremap = true, silent = true, desc = 'Toggle Autocompletion' })
 
+-- Add switch for spell check
+vim.opt.spelllang = { 'en' }
+function ToggleSpellLang()
+  local current = vim.opt.spelllang:get()[1]
+  if current == 'en' then
+    vim.opt.spelllang = { 'de' }
+    require 'notify' 'Spellcheck set to German'
+  else
+    vim.opt.spelllang = { 'en' }
+    require 'notify' 'Spellcheck set to English'
+  end
+end
+
+vim.keymap.set('n', '<leader>dt', ToggleSpellLang, { desc = 'Toggle spelllang (en/de)' })
+
 -- Check .h files as c files not cpp
 vim.api.nvim_create_autocmd({ 'BufRead', 'BufNewFile' }, {
   pattern = '*.h',
@@ -1134,6 +1106,13 @@ vim.api.nvim_create_autocmd({ 'BufRead', 'BufNewFile' }, {
 })
 
 -- Indentation settings
+-- General indent setttings
+vim.opt.autoindent = true
+vim.opt.smartindent = true
+vim.opt.expandtab = true
+vim.opt.tabstop = 4
+vim.opt.shiftwidth = 4
+
 -- Settings for c and h files
 vim.api.nvim_create_autocmd('FileType', {
   pattern = { 'c', 'cpp', 'h' },
@@ -1167,25 +1146,3 @@ vim.api.nvim_create_autocmd('FileType', {
     vim.bo.softtabstop = 2
   end,
 })
-
--- General indent setttings
-vim.opt.autoindent = true
-vim.opt.smartindent = true
-vim.opt.expandtab = true
-vim.opt.tabstop = 4
-vim.opt.shiftwidth = 4
-
--- Add switch for spell check
-vim.opt.spelllang = { 'en' }
-function ToggleSpellLang()
-  local current = vim.opt.spelllang:get()[1]
-  if current == 'en' then
-    vim.opt.spelllang = { 'de' }
-    require 'notify' 'Spellcheck set to German'
-  else
-    vim.opt.spelllang = { 'en' }
-    require 'notify' 'Spellcheck set to English'
-  end
-end
-
-vim.keymap.set('n', '<leader>dt', ToggleSpellLang, { desc = 'Toggle spelllang (en/de)' })
