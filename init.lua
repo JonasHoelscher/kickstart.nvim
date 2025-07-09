@@ -1003,7 +1003,7 @@ require('lazy').setup({
 vim.cmd 'colorscheme gruvbox'
 vim.g.vimtex_compiler_latexmk = {
   executable = 'latexmk',
-  options = { '-pdflatex=lualatex', '-pdf', '-shell-escape', '-synctex=1', '-interaction=nonstopmode' },
+  options = { '-pdf', '-shell-escape', '-synctex=1', '-interaction=nonstopmode' },
 }
 
 -- Highlight spaces at end of line
