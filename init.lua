@@ -352,6 +352,99 @@ require('lazy').setup({
         { '<leader>w', group = '[W]orkspace' },
         { '<leader>t', group = '[T]oggle' },
         { '<leader>h', group = 'Git [H]unk', mode = { 'n', 'v' } },
+        { '<leader>b', group = 'De[B]ugger' },
+      },
+    },
+    keys = {
+      -- Debugging
+      {
+        '<leader>b',
+        group = 'De[B]ugger',
+        nowait = true,
+        remap = false,
+      },
+      {
+        '<leader>bt',
+        function()
+          require('dap').toggle_breakpoint()
+        end,
+        desc = 'Toggle Breakpoint',
+        nowait = true,
+        remap = false,
+      },
+      {
+        '<leader>bc',
+        function()
+          require('dap').continue()
+        end,
+        desc = 'Continue',
+        nowait = true,
+        remap = false,
+      },
+      {
+        '<leader>bi',
+        function()
+          require('dap').step_into()
+        end,
+        desc = 'Step Into',
+        nowait = true,
+        remap = false,
+      },
+      {
+        '<leader>bo',
+        function()
+          require('dap').step_out()
+        end,
+        desc = 'Step Out',
+        nowait = true,
+        remap = false,
+      },
+      {
+        '<leader>br',
+        function()
+          require('dap').repl.open()
+        end,
+        desc = 'Open REPL',
+        nowait = true,
+        remap = false,
+      },
+      {
+        '<leader>bl',
+        function()
+          require('dap').run_last()
+        end,
+        desc = 'Run Last',
+        nowait = true,
+        remap = false,
+      },
+      {
+        '<leader>bq',
+        function()
+          require('dap').terminate()
+          require('dapui').close()
+          require('nvim-dap-virtual-text').toggle()
+        end,
+        desc = 'Terminate',
+        nowait = true,
+        remap = false,
+      },
+      {
+        '<leader>bb',
+        function()
+          require('dap').list_breakpoints()
+        end,
+        desc = 'List Breakpoints',
+        nowait = true,
+        remap = false,
+      },
+      {
+        '<leader>be',
+        function()
+          require('dap').set_exception_breakpoints { 'all' }
+        end,
+        desc = 'Set Exception Breakpoints',
+        nowait = true,
+        remap = false,
       },
     },
   },
@@ -654,8 +747,11 @@ require('lazy').setup({
           settings = {
             ltex = {
               -- enabled = { 'tex', 'latex', 'markdown', 'restructuredtext' },
-              language = 'de-DE',
-              additionalLanguages = { 'de-DE', 'en-US' },
+              language = 'en-US',
+              additionalRules = {
+                enablePickyRules = true,
+                motherTongue = 'de',
+              },
             },
           },
         },
@@ -1111,3 +1207,51 @@ vim.opt.tabstop = 4
 vim.opt.shiftwidth = 4
 vim.opt.autoindent = true
 vim.opt.smartindent = true
+
+-- Debug configurations
+local mason_dap = require 'mason-nvim-dap'
+local dap = require 'dap'
+local ui = require 'dapui'
+local dap_virtual_text = require 'nvim-dap-virtual-text'
+
+-- Dap Virtual Text
+dap_virtual_text.setup()
+
+mason_dap.setup {
+  ensure_installed = { 'debugpy' },
+  automatic_installation = true,
+  handlers = {
+    function(config)
+      require('mason-nvim-dap').default_setup(config)
+    end,
+  },
+}
+
+-- Configurations
+dap.configurations = {
+  python = {
+    {
+      name = 'Launch file',
+      type = 'python',
+      request = 'launch',
+      program = '${file}',
+      cwd = '${workspaceFolder}',
+    },
+  },
+}
+
+-- Debug UI
+ui.setup()
+
+dap.listeners.before.attach.dapui_config = function()
+  ui.open()
+end
+dap.listeners.before.launch.dapui_config = function()
+  ui.open()
+end
+dap.listeners.before.event_terminated.dapui_config = function()
+  ui.close()
+end
+dap.listeners.before.event_exited.dapui_config = function()
+  ui.close()
+end
