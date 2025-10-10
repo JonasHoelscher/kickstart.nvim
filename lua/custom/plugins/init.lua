@@ -52,6 +52,17 @@ return {
     'mbbill/undotree',
   },
   {
+    'jay-babu/mason-nvim-dap.nvim',
+    event = 'VeryLazy',
+    dependencies = {
+      'williamboman/mason.nvim',
+      'mfussenegger/nvim-dap',
+    },
+    opt = {
+      handlers = {},
+    },
+  },
+  {
     'mfussenegger/nvim-dap',
     event = 'VeryLazy',
     dependencies = {

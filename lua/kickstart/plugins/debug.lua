@@ -22,61 +22,101 @@ return {
     'jay-babu/mason-nvim-dap.nvim',
 
     -- Add your own debuggers here
-    'leoluz/nvim-dap-go',
+    'theHamsta/nvim-dap-virtual-text',
   },
   keys = {
-    -- Basic debugging keymaps, feel free to change to your liking!
-    {
-      '<F5>',
-      function()
-        require('dap').continue()
-      end,
-      desc = 'Debug: Start/Continue',
-    },
-    {
-      '<F1>',
-      function()
-        require('dap').step_into()
-      end,
-      desc = 'Debug: Step Into',
-    },
-    {
-      '<F2>',
-      function()
-        require('dap').step_over()
-      end,
-      desc = 'Debug: Step Over',
-    },
-    {
-      '<F3>',
-      function()
-        require('dap').step_out()
-      end,
-      desc = 'Debug: Step Out',
-    },
+    -- Debugging
     {
       '<leader>b',
+      group = 'De[B]ugger',
+      nowait = true,
+      remap = false,
+    },
+    {
+      '<leader>bt',
       function()
         require('dap').toggle_breakpoint()
       end,
-      desc = 'Debug: Toggle Breakpoint',
+      desc = 'Toggle Breakpoint',
+      nowait = true,
+      remap = false,
     },
     {
-      '<leader>B',
+      '<leader>bc',
       function()
-        require('dap').set_breakpoint(vim.fn.input 'Breakpoint condition: ')
+        require('dap').continue()
       end,
-      desc = 'Debug: Set Breakpoint',
+      desc = 'Continue',
+      nowait = true,
+      remap = false,
     },
-    -- Toggle to see last session result. Without this, you can't see session output in case of unhandled exception.
     {
-      '<F7>',
+      '<leader>bi',
       function()
-        require('dapui').toggle()
+        require('dap').step_into()
       end,
-      desc = 'Debug: See last session result.',
+      desc = 'Step Into',
+      nowait = true,
+      remap = false,
+    },
+    {
+      '<leader>bo',
+      function()
+        require('dap').step_out()
+      end,
+      desc = 'Step Out',
+      nowait = true,
+      remap = false,
+    },
+    {
+      '<leader>br',
+      function()
+        require('dap').repl.open()
+      end,
+      desc = 'Open REPL',
+      nowait = true,
+      remap = false,
+    },
+    {
+      '<leader>bl',
+      function()
+        require('dap').run_last()
+      end,
+      desc = 'Run Last',
+      nowait = true,
+      remap = false,
+    },
+    {
+      '<leader>bq',
+      function()
+        require('dap').terminate()
+        require('dapui').close()
+        require('nvim-dap-virtual-text').toggle()
+      end,
+      desc = 'Terminate',
+      nowait = true,
+      remap = false,
+    },
+    {
+      '<leader>bb',
+      function()
+        require('dap').list_breakpoints()
+      end,
+      desc = 'List Breakpoints',
+      nowait = true,
+      remap = false,
+    },
+    {
+      '<leader>be',
+      function()
+        require('dap').set_exception_breakpoints { 'all' }
+      end,
+      desc = 'Set Exception Breakpoints',
+      nowait = true,
+      remap = false,
     },
   },
+
   config = function()
     local dap = require 'dap'
     local dapui = require 'dapui'
@@ -88,13 +128,17 @@ return {
 
       -- You can provide additional configuration to the handlers,
       -- see mason-nvim-dap README for more information
-      handlers = {},
+      handlers = {
+        function(config)
+          require('mason-nvim-dap').default_setup(config)
+        end,
+      },
 
       -- You'll need to check that you have the required things installed
       -- online, please don't ask me how to install them :)
       ensure_installed = {
         -- Update this to ensure that you have the debuggers for the langs you want
-        'delve',
+        'cppdbg',
       },
     }
 
@@ -137,12 +181,12 @@ return {
     dap.listeners.before.event_exited['dapui_config'] = dapui.close
 
     -- Install golang specific config
-    require('dap-go').setup {
-      delve = {
-        -- On Windows delve must be run attached or it crashes.
-        -- See https://github.com/leoluz/nvim-dap-go/blob/main/README.md#configuring
-        detached = vim.fn.has 'win32' == 0,
-      },
-    }
+    -- require('dap-go').setup {
+    --   delve = {
+    --     -- On Windows delve must be run attached or it crashes.
+    --     -- See https://github.com/leoluz/nvim-dap-go/blob/main/README.md#configuring
+    --     detached = vim.fn.has 'win32' == 0,
+    --   },
+    -- }
   end,
 }
