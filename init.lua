@@ -899,9 +899,10 @@ require('lazy').setup({
     -- You can configure highlights by doing something like:
     -- vim.cmd.hi 'Comment gui=none'
     -- end,
-    'ellisonleao/gruvbox.nvim',
+    'bluz71/vim-moonfly-colors',
+    lazy = false,
+    name = 'moonfly',
     priority = 1000,
-    config = true,
   },
   -- Highlight todo, notes, etc in comments
   { 'folke/todo-comments.nvim', event = 'VimEnter', dependencies = { 'nvim-lua/plenary.nvim' }, opts = { signs = false } },
@@ -1004,7 +1005,7 @@ require('lazy').setup({
 })
 
 -- Set colorscheme
-vim.cmd 'colorscheme gruvbox'
+vim.cmd 'colorscheme moonfly'
 vim.g.vimtex_compiler_latexmk = {
   executable = 'latexmk',
   options = { '-pdf', '-shell-escape', '-synctex=1', '-interaction=nonstopmode' },
