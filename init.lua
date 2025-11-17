@@ -1032,6 +1032,12 @@ vim.api.nvim_create_autocmd('FileType', {
 -- Set undotree
 vim.keymap.set('n', '<leader><F5>', vim.cmd.UndotreeToggle, { desc = 'Toggle Undotree' })
 
+-- Toglle Zen Mode
+vim.keymap.set('n', '<leader>z', '<CMD>ZenMode<CR>', { desc = 'Toggle Zen Mode' })
+
+-- Open CMD line info
+vim.keymap.set('n', '<leader>Q', 'q:', { desc = 'Open command history' })
+
 -- Set neotree opening
 vim.keymap.set('n', '<leader>e', '<CMD>Neotree toggle<CR>', { desc = 'Toggle Neotree' })
 
