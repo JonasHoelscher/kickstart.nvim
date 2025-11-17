@@ -9,6 +9,7 @@ return {
     init = function()
       vim.g.vimtex_view_method = 'zathura'
       vim.g.vimtex_view_general_options = '--unique file:@pdf\\#src:@line@tex'
+      vim.g.vimtex_latexmk_options = '-pdf -shell-escape -verbose -file-line-error -synctex=1 -interaction=nonstopmode'
     end,
   },
   {
@@ -71,5 +72,9 @@ return {
       'jay-babu/mason-nvim-dap.nvim',
       'theHamsta/nvim-dap-virtual-text',
     },
+  },
+  {
+    'folke/zen-mode.nvim',
+    opts = {},
   },
 }
