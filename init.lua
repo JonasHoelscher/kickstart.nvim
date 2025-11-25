@@ -1125,7 +1125,6 @@ vim.opt.autoindent = true
 vim.opt.smartindent = true
 
 -- Set signature help
-vim.keymap.set('n', 'K', vim.lsp.buf.signature_help, { silent = true, noremap = true })
 vim.keymap.set('i', '<C-k>', function()
   vim.lsp.buf.signature_help()
 end, { silent = true })
