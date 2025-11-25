@@ -161,7 +161,7 @@ vim.opt.inccommand = 'split'
 vim.opt.cursorline = true
 
 -- Minimal number of screen lines to keep above and below the cursor.
--- vim.opt.scrolloff = 10
+vim.opt.scrolloff = 10
 
 -- [[ Basic Keymaps ]]
 --  See `:help vim.keymap.set()`
@@ -1123,3 +1123,9 @@ vim.opt.tabstop = 4
 vim.opt.shiftwidth = 4
 vim.opt.autoindent = true
 vim.opt.smartindent = true
+
+-- Set signature help
+vim.keymap.set('n', 'K', vim.lsp.buf.signature_help, { silent = true, noremap = true })
+vim.keymap.set('i', '<C-k>', function()
+  vim.lsp.buf.signature_help()
+end, { silent = true })
