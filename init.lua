@@ -161,7 +161,7 @@ vim.opt.inccommand = 'split'
 vim.opt.cursorline = true
 
 -- Minimal number of screen lines to keep above and below the cursor.
-vim.opt.scrolloff = 10
+vim.opt.scrolloff = 5
 
 -- [[ Basic Keymaps ]]
 --  See `:help vim.keymap.set()`
@@ -1128,3 +1128,16 @@ vim.opt.smartindent = true
 vim.keymap.set('i', '<C-k>', function()
   vim.lsp.buf.signature_help()
 end, { silent = true })
+
+-- Enable osc52
+vim.g.clipboard = {
+  name = 'OSC 52',
+  copy = {
+    ['+'] = require('vim.ui.clipboard.osc52').copy '+',
+    ['*'] = require('vim.ui.clipboard.osc52').copy '*',
+  },
+  paste = {
+    ['+'] = require('vim.ui.clipboard.osc52').paste '+',
+    ['*'] = require('vim.ui.clipboard.osc52').paste '*',
+  },
+}
