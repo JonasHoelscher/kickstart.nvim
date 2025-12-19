@@ -653,7 +653,7 @@ require('lazy').setup({
       local servers = {
         clangd = {},
         -- gopls = {},
-        basedpyright = {},
+        pylsp = {},
         -- ruff = {},
         ltex = {
           settings = {
@@ -1103,8 +1103,8 @@ vim.api.nvim_create_autocmd('FileType', {
   callback = function()
     vim.bo.tabstop = 4
     vim.bo.shiftwidth = 4
-    vim.bo.textwidth = 79 -- Maximale Zeilenlänge auf 80 setzen
-    vim.wo.colorcolumn = '79' -- Visuelle Markierung bei 80 Zeichen
+    vim.bo.textwidth = 80
+    vim.wo.colorcolumn = '80'
     vim.bo.softtabstop = 4
   end,
 })
