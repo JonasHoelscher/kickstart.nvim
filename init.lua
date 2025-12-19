@@ -125,6 +125,9 @@ vim.schedule(function()
   vim.opt.clipboard = 'unnamedplus'
 end)
 
+-- Set terminal colors
+vim.opt.termguicolors = true
+
 -- Enable break indent
 vim.opt.breakindent = true
 
@@ -650,7 +653,7 @@ require('lazy').setup({
       local servers = {
         clangd = {},
         -- gopls = {},
-        pyright = {},
+        basedpyright = {},
         -- ruff = {},
         ltex = {
           settings = {
@@ -1131,13 +1134,14 @@ end, { silent = true })
 
 -- Enable osc52
 vim.g.clipboard = {
-  name = 'OSC 52',
+  name = 'tmux-osc52',
   copy = {
-    ['+'] = require('vim.ui.clipboard.osc52').copy '+',
-    ['*'] = require('vim.ui.clipboard.osc52').copy '*',
+    ['+'] = 'tmux load-buffer -w -',
+    ['*'] = 'tmux load-buffer -w -',
   },
   paste = {
-    ['+'] = require('vim.ui.clipboard.osc52').paste '+',
-    ['*'] = require('vim.ui.clipboard.osc52').paste '*',
+    ['+'] = 'tmux save-buffer -',
+    ['*'] = 'tmux save-buffer -',
   },
+  cache_enabled = 0,
 }
