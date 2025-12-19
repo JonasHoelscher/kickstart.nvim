@@ -1131,17 +1131,3 @@ vim.opt.smartindent = true
 vim.keymap.set('i', '<C-k>', function()
   vim.lsp.buf.signature_help()
 end, { silent = true })
-
--- Enable osc52
-vim.g.clipboard = {
-  name = 'tmux-osc52',
-  copy = {
-    ['+'] = 'tmux load-buffer -w -',
-    ['*'] = 'tmux load-buffer -w -',
-  },
-  paste = {
-    ['+'] = 'tmux save-buffer -',
-    ['*'] = 'tmux save-buffer -',
-  },
-  cache_enabled = 0,
-}
